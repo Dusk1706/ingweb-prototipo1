@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('estado_sucursales', function (Blueprint $table) {
-            $table->integer('sucursal_id');
+            $table->integer('id_sucursal');
             $table->boolean('caja_abierta')->default(false);
 
-            $table->primary('sucursal_id');
+            $table->primary('id_sucursal');
         });
     }
 

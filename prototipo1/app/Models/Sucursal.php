@@ -11,13 +11,12 @@ class Sucursal extends Model
 
     protected $table = 'sucursales';
 
-    protected $primaryKey = ['sucursal_id', 'denominacion'];
+    protected $primaryKey = ['id_sucursal', 'denominacion'];
 
     public $incrementing = false;
     
-
     protected $fillable = [
-        'sucursal_id',
+        'id_sucursal',
         'denominacion',
         'entregados',
         'existencia',

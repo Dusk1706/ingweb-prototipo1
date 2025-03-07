@@ -8,13 +8,13 @@ class SucursalEstatus extends Model
 {
    
     protected $table = 'estado_sucursales';
-    protected $primaryKey = 'sucursal_id';
+    protected $primaryKey = 'id_sucursal';
     
     public $incrementing = false;
-
+    public $timestamps = false;
 
     protected $fillable = [
-        'sucursal_id',
+        'id_sucursal',
         'caja_abierta'
     ];
 }
