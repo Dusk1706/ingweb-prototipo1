@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Modelo;
 
-class CajaController extends Controller
+class SucursalController extends Controller
 {
     protected $modelo;
 
@@ -17,13 +17,13 @@ class CajaController extends Controller
 
     public function index()
     {
-        return view('caja');
+        return view('sucursal');
     }
 
 
     public function abrirCaja(Request $request)
     {
-        $sucursalId = $request->input('id_sucursal');
+        $sucursalId = auth()->user()->id_sucursal;
 
         if (!$this->modelo->abrirCaja($sucursalId)) {
             return response()->json(['mensaje' => 'No se pudo abrir la caja.'], 400);
@@ -34,7 +34,7 @@ class CajaController extends Controller
 
     public function cambiarCheques(Request $request)
     {
-        $sucursalId = $request->input('id_sucursal');
+        $sucursalId = auth()->user()->id_sucursal;
         $importe = $request->input('importe');
 
         $cajaAbierta = $this->modelo->estaCajaAbierta($sucursalId);
@@ -54,7 +54,7 @@ class CajaController extends Controller
 
     public function agregarDinero(Request $request)
     {
-        $sucursalId = $request->input('id_sucursal');
+        $sucursalId = $sucursalId = auth()->user()->id_sucursal;
         $denominacion = $request->input('denominacion');
         $existencia = $request->input('existencia');
 

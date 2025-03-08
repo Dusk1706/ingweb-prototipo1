@@ -16,8 +16,8 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('caja')" :active="request()->routeIs('caja')">
-                        {{ __('Caja') }}
+                    <x-nav-link :href="route('sucursal')" :active="request()->routeIs('sucursal')">
+                        {{ __('Sucursal') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -75,8 +75,8 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('caja')" :active="request()->routeIs('caja')">
-                {{ __('Caja') }}
+            <x-responsive-nav-link :href="route('sucursal')" :active="request()->routeIs('sucursal')">
+                {{ __('Sucursal') }}
             </x-responsive-nav-link>
         </div>
 
