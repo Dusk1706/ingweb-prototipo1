@@ -2,23 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseDatos extends Model
 {
-    public function estaCajaAbierta($sucursalId)
+    public function iniciarTransaccion()
     {
-        return SucursalEstatus::where('id_sucursal', $sucursalId)->first();
+        return DB::beginTransaction();
+    }
+
+    public function finalizarTransaccion()
+    {
+        return DB::commit();
+    }
+
+    public function cancelarTransaccion()
+    {
+        return DB::rollBack();
     }
 
     public function getEstadoCaja($sucursalId)
     {
-        return SucursalEstatus::where('id_sucursal', $sucursalId)->first();
+        return SucursalEstatus::where('id_sucursal', $sucursalId)
+            ->lockForUpdate()
+            ->first();
     }
 
     public function getDenominaciones($sucursalId)
     {
         return Sucursal::where('id_sucursal', $sucursalId)
+            ->lockForUpdate()
             ->orderBy('denominacion', 'desc')
             ->get();
     }

@@ -25,11 +25,12 @@ class SucursalController extends Controller
     {
         $sucursalId = auth()->user()->id_sucursal;
 
-        if (!$this->modelo->abrirCaja($sucursalId)) {
-            return response()->json(['mensaje' => 'No se pudo abrir la caja.'], 400);
+        $mensaje = $this->modelo->abrirCaja($sucursalId);
+        if (!$mensaje) {
+            return back()->with('error', 'No se pudo abrir la caja');
         }
 
-        return response()->json(['mensaje' => 'La caja fue abierta exitosamente.'], 200);
+        return back()->with('success', 'La caja fue abierta exitosamente');
     }
 
     public function cambiarCheques(Request $request)
@@ -37,32 +38,25 @@ class SucursalController extends Controller
         $sucursalId = auth()->user()->id_sucursal;
         $importe = $request->input('importe');
 
-        $cajaAbierta = $this->modelo->estaCajaAbierta($sucursalId);
+        $denomUsadas = $this->modelo->cambiarCheques($sucursalId, $importe);
 
-        if (!$cajaAbierta) {
-            return response()->json(['mensaje' => 'La caja no ha sido abierta.'], 400);
+        if (!$denomUsadas) {
+            return back()->with('error', 'No se pudo retirar el dinero de la caja');
         }
 
-        $retiroExitoso = $this->modelo->retirarDineroACaja($sucursalId, $importe);
+        $denomDetalle = collect($denomUsadas)->pluck('entregados', 'denominacion')->toArray();
 
-        if (!$retiroExitoso) {
-            return response()->json(['mensaje' => 'No se pudo retirar el dinero.'], 400);
-        }
-
-        return response()->json(['mensaje' => 'El retiro fue exitoso.'], 200);
+        return view('sucursal', compact('denomDetalle'))
+            ->with('success', 'El dinero fue retirado exitosamente');
     }
 
-    public function agregarDinero(Request $request)
+
+
+    public function agregarBilletes(Request $request)
     {
         $sucursalId = $sucursalId = auth()->user()->id_sucursal;
         $denominacion = $request->input('denominacion');
         $existencia = $request->input('existencia');
-
-        $cajaAbierta = $this->modelo->estaCajaAbierta($sucursalId);
-
-        if (!$cajaAbierta) {
-            return response()->json(['mensaje' => 'La caja no ha sido abierta.'], 400);
-        }
 
         $this->modelo->insertarDenominacion($sucursalId, $denominacion, $existencia);
 

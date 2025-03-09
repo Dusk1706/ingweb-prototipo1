@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseDatos;
+use Nette\Utils\Random;
+use Illuminate\Support\Facades\Log;
 
 class Modelo extends Model
 {
@@ -14,60 +16,95 @@ class Modelo extends Model
         $this->baseDatos = new BaseDatos();
     }
 
-    public function isCajaAbierta($sucursalId)
-    {
-        return $this->baseDatos->isCajaAbierta($sucursalId);
-    }
-
     public function abrirCaja($sucursalId)
     {
-        $sucursal = $this->baseDatos->getEstadoCaja($sucursalId);
+        try {
+            $this->baseDatos->iniciarTransaccion();
 
-        if ($sucursal && $sucursal->caja_abierta) {
+            $caja = $this->baseDatos->getEstadoCaja($sucursalId);
+
+            if (!is_null($caja) && $caja->caja_abierta) {
+                $this->baseDatos->cancelarTransaccion();
+                return false;
+            }
+
+            if (is_null($caja)) {
+                $caja = new SucursalEstatus();
+                $caja->id_sucursal = $sucursalId;
+
+                foreach ([1, 2, 5, 10, 20, 50, 100, 200, 500, 1000] as $denominacion) {
+                    $sucursal = new Sucursal();
+                    $sucursal->id_sucursal = $sucursalId;
+                    $sucursal->denominacion = $denominacion;
+                    $sucursal->existencia = rand(0, 50); 
+                    $sucursal->entregados = 0;
+                    $sucursal->save();
+                }
+            }
+
+            $caja->caja_abierta = true;
+            $caja->save();
+
+            $this->baseDatos->finalizarTransaccion();
+            return true;
+        } catch (\Exception $e) {
+            $this->baseDatos->cancelarTransaccion();
             return false;
         }
-
-        if (!$sucursal) {
-            $sucursal = new SucursalEstatus();
-            $sucursal->id_sucursal = $sucursalId;
-        }
-        $sucursal->caja_abierta = true;
-        
-        $sucursal->save();
-
-        return true;
     }
 
-    public function retirarDineroACaja($sucursalId, $importe)
+    public function cambiarCheques($sucursalId, $importe)
     {
-        $denominaciones = $this->baseDatos->getDenominaciones($sucursalId);
+        try {
+            $this->baseDatos->iniciarTransaccion();
 
-        $importeRestante = $importe;
+            $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
-        foreach ($denominaciones as $denom) {
-            $valor = $denom->denominacion;
-            $cantidadDisponible = $denom->existencia;
+            if (!$cajaAbierta || !$cajaAbierta->caja_abierta) {
+                $this->baseDatos->cancelarTransaccion();
+                return false;
+            }
 
-            $cantidadNecesaria = (int) ($importeRestante / $valor);
+            $denominaciones = $this->baseDatos->getDenominaciones($sucursalId);
+            $importeRestante = $importe;
+            $denomUsadas = [];
 
-            $cantidadARetirar = min($cantidadNecesaria, $cantidadDisponible);
+            foreach ($denominaciones as $denom) {
+                $valor = $denom->denominacion;
+                $cantidadDisponible = $denom->existencia;
 
-            $denom->existencia -= $cantidadARetirar;
-            $denom->entregados += $cantidadARetirar;
-            $importeRestante -= $cantidadARetirar * $valor;
-        }
+                $cantidadNecesaria = (int) ($importeRestante / $valor);
+                $cantidadARetirar = min($cantidadNecesaria, $cantidadDisponible);
 
-        if ($importeRestante != 0) {
+                $denom->existencia -= $cantidadARetirar;
+                $denom->entregados += $cantidadARetirar;
+                $importeRestante -= $cantidadARetirar * $valor;
+
+                if ($cantidadARetirar > 0) {
+                    $denomUsadas[] = [
+                        'denominacion' => $valor,
+                        'entregados' => $denom->entregados
+                    ];
+                }
+            }
+
+            if ($importeRestante != 0) {
+                $this->baseDatos->cancelarTransaccion();
+                return false;
+            }
+
+            foreach ($denominaciones as $denom) {
+                $denom->save();
+            }
+
+            $this->baseDatos->finalizarTransaccion();
+
+            return $denomUsadas;
+        } catch (\Exception $e) {
+            $this->baseDatos->cancelarTransaccion();
             return false;
         }
-
-        foreach ($denominaciones as $denom) {
-            $denom->save();
-        }
-
-        return true;
     }
-
 
 
 }
