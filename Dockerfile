@@ -3,19 +3,21 @@ FROM php:8.4-apache as web
 
 # Instala dependencias del sistema y Node.js/npm
 RUN apt-get update && apt-get install -y \
+    libicu-dev \
     libzip-dev \
     zip \
     nodejs \
     npm \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-configure intl
 
 # Habilita mod_rewrite y configura Apache
 RUN a2enmod rewrite \
     && sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 # Instala extensiones PHP
-RUN docker-php-ext-install pdo_mysql zip
+RUN docker-php-ext-install pdo_mysql zip intl
 
 # Configura el DocumentRoot de Apache
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
