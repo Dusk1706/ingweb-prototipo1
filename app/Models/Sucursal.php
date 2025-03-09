@@ -11,6 +11,7 @@ class Sucursal extends Model
     protected $primaryKey = 'id_caja';
 
     public $incrementing = true;
+    public $timestamps = false;
     
     protected $fillable = [
         'id_caja',

@@ -36,10 +36,11 @@ class Modelo extends Model
                     $sucursal = new Sucursal();
                     $sucursal->id_sucursal = $sucursalId;
                     $sucursal->denominacion = $denominacion;
-                    $sucursal->existencia = rand(0, 50); 
+                    $sucursal->existencia = rand(0, 50);
                     $sucursal->entregados = 0;
                     $sucursal->save();
                 }
+
             }
 
             $caja->caja_abierta = true;
@@ -48,6 +49,7 @@ class Modelo extends Model
             $this->baseDatos->finalizarTransaccion();
             return true;
         } catch (\Exception $e) {
+            Log::error('Error al abrir la caja en modelo' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }
@@ -61,6 +63,7 @@ class Modelo extends Model
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
             if (!$cajaAbierta || !$cajaAbierta->caja_abierta) {
+                Log::error('La caja no está abierta en cheques');
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
@@ -68,6 +71,8 @@ class Modelo extends Model
             $denominaciones = $this->baseDatos->getDenominaciones($sucursalId);
             $importeRestante = $importe;
             $denomUsadas = [];
+            $denomUsadas['importe'] = (int) $importe;
+            $denomUsadas['denominaciones'] = [];
 
             foreach ($denominaciones as $denom) {
                 $valor = $denom->denominacion;
@@ -81,15 +86,16 @@ class Modelo extends Model
                 $importeRestante -= $cantidadARetirar * $valor;
 
                 if ($cantidadARetirar > 0) {
-                    $denomUsadas[] = [
+                    $denomUsadas['denominaciones'][] = [
                         'denominacion' => $valor,
-                        'entregados' => $denom->entregados
+                        'entregados' => $cantidadARetirar
                     ];
                 }
             }
 
             if ($importeRestante != 0) {
                 $this->baseDatos->cancelarTransaccion();
+                Log::error('No hay suficiente dinero en la caja');
                 return false;
             }
 
@@ -99,8 +105,10 @@ class Modelo extends Model
 
             $this->baseDatos->finalizarTransaccion();
 
+            Log::info('Se retiró el dinero de la caja: ' . json_encode($denomUsadas));
             return $denomUsadas;
         } catch (\Exception $e) {
+            Log::error('Error al retirar el dinero de la caja en modelo' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }

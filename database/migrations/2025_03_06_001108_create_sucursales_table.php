@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('sucursales', function (Blueprint $table) {
             $table->id('id_caja');
             $table->integer('id_sucursal');
-            $table->string('denominacion');
+            $table->integer('denominacion');
             $table->integer('entregados')->default(0);
             $table->integer('existencia')->default(0);
             

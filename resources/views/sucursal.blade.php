@@ -29,8 +29,9 @@
                             <span class="text-2xl text-gray-400 dark:text-gray-500">$</span>
                         </div>
                         <input type="number" id="importe" name="importe"
-                            class="w-full py-4 pl-10 pr-4 text-3xl font-medium bg-gray-50 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800/50 transition-all"
-                            placeholder="0.00" step="1" required autocomplete="off">
+                            class="w-full py-4 pl-10 pr-4 text-3xl font-medium text-white bg-gray-50 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800/50 transition-all"
+                            placeholder="0.00" required autocomplete="off" value="{{ $importe ?? 0 }}">
+
                     </div>
 
                 </div>
@@ -121,7 +122,7 @@
                                     <span
                                         class="text-base font-medium text-gray-700 dark:text-gray-300">${{ $coin }}</span>
                                     <input type="number" data-denominacion="{{ $coin }}"
-                                        class="denominacion-input w-20 px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        class="denominacion-input w-20 px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="0" min="0" value="{{ $denomDetalle[$coin] ?? 0 }}">
                                 </div>
                             @endforeach
@@ -143,7 +144,7 @@
                                             ${{ number_format($bill) }}
                                         </span>
                                         <input type="number" data-denominacion="{{ $bill }}"
-                                            class="denominacion-input w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            class="denominacion-input w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="0" min="0" value="{{ $denomDetalle[$bill] ?? 0 }}">
                                     </div>
                                 </div>
@@ -160,7 +161,7 @@
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total:</span>
-                            <span class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                            <span class="text-3xl font-bold text-blue-600 dark:text-blue-300">
                                 $<span id="total-calculado">0.00</span>
                             </span>
                         </div>

@@ -23,7 +23,25 @@ class SucursalResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('id_caja')
+                    ->label('ID Caja')
+                    ->numeric()
+                    ->required(),
+                
+                Forms\Components\TextInput::make('id_sucursal')
+                    ->label('ID Sucursal')
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\TextInput::make('denominacion')
+                    ->label('Denominación')
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\TextInput::make('entregados')
+                    ->label('Entregados')
+                    ->numeric()
+                    ->required(),
             ]);
     }
 
@@ -31,7 +49,11 @@ class SucursalResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id_caja'),
+                Tables\Columns\TextColumn::make('id_sucursal'),
+                Tables\Columns\TextColumn::make('denominacion'),
+                Tables\Columns\TextColumn::make('entregados'),
+                Tables\Columns\TextColumn::make('existencia'),
             ])
             ->filters([
                 //
