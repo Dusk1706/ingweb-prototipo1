@@ -62,7 +62,7 @@ class Modelo extends Model
 
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
-            if (!$cajaAbierta || !$cajaAbierta->caja_abierta) {
+            if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
                 Log::error('La caja no está abierta en cheques');
                 $this->baseDatos->cancelarTransaccion();
                 return false;
@@ -86,10 +86,10 @@ class Modelo extends Model
                 $importeRestante -= $cantidadARetirar * $valor;
 
                 if ($cantidadARetirar > 0) {
-                    $denomUsadas['denominaciones'][] = [
+                    array_push($denomUsadas['denominaciones'], [
                         'denominacion' => $valor,
                         'entregados' => $cantidadARetirar
-                    ];
+                    ]);
                 }
             }
 
@@ -115,4 +115,59 @@ class Modelo extends Model
     }
 
 
+    public function agregarBilletes($sucursalId)
+    {
+        try {
+            $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
+
+            if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
+                Log::error('La caja no está abierta en billetes');
+                $this->baseDatos->cancelarTransaccion();
+                return false;
+            }
+
+            $denominaciones = $this->baseDatos->getDenominaciones($sucursalId);
+
+            foreach ($denominaciones as $denom) {
+                $denom->existencia += rand(0, 50);
+                $this->baseDatos->guardar($denom);
+            }
+
+            Log::info('Se agregó la denominación a la caja: ' . json_encode($denom));
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error al agregar la denominación a la caja en modelo' . $e->getMessage());
+            $this->baseDatos->cancelarTransaccion();
+            return false;
+        }
+    }
+   
+
+    public function generarBilletes($sucursalId)
+    {
+        try {
+            $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
+
+            if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
+                Log::error('La caja no está abierta en billetes');
+                $this->baseDatos->cancelarTransaccion();
+                return false;
+            }
+            $denominaciones = [];
+            $denominaciones['denominaciones'] = [];
+            foreach ([1000,500,200,100,50,20,10,5,2,1] as $denom) {
+               array_push($denominaciones['denominaciones'], [
+                'denominacion' => $denom,
+                'entregados' => rand(0,50)
+            ]);
+            }
+
+            return $denominaciones;
+        } catch (\Exception $e) {
+            Log::error('Error al agregar la denominación a la caja en modelo' . $e->getMessage());
+            $this->baseDatos->cancelarTransaccion();
+            return false;
+        }
+    }
+   
 }

@@ -68,12 +68,18 @@ class SucursalController extends Controller
 
     public function agregarBilletes(Request $request)
     {
+        
         $sucursalId = $sucursalId = auth()->user()->id_sucursal;
-        $denominacion = $request->input('denominacion');
-        $existencia = $request->input('existencia');
+        $denomUsadas = $this->modelo->generarBilletes($sucursalId);
+        if (!$denomUsadas) {
+            return back()->with('error', 'No se pudo generar billetes');
+        }
+        $denomDetalle = collect($denomUsadas['denominaciones'])
+        ->pluck('entregados', 'denominacion')
+        ->toArray();
 
-        $this->modelo->insertarDenominacion($sucursalId, $denominacion, $existencia);
-
-        return response()->json(['mensaje' => 'La denominación fue agregada exitosamente.'], 200);
+        return view('sucursal', [
+            'denomDetalle' => $denomDetalle
+        ])->with('success', 'El dinero fue generado exitosamente');
     }
 }

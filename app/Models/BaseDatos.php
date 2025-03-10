@@ -37,13 +37,4 @@ class BaseDatos extends Model
             ->get();
     }
 
-    public function insertarDenominacion($sucursalId, $denominacion, $existencia)
-    {
-        $sucursal = new Sucursal();
-        $sucursal->id_sucursal = $sucursalId;
-        $sucursal->denominacion = $denominacion;
-        $sucursal->existencia = $existencia;
-        $sucursal->entregados = 0;
-        $sucursal->save();
-    }
 }
