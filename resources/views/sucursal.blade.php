@@ -40,7 +40,7 @@
             <!-- Grid de Botones -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Botón: Abrir Caja -->
-                <form action="{{ route('abrir-caja') }}" method="POST" class="block">
+                <form action="{{ url('/sucursal/abrir-caja') }}" method="POST" class="block">
                     @csrf
                     <button type="submit"
                         class="w-full p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow hover:shadow-lg transition transform hover:scale-105">

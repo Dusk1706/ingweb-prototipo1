@@ -1,5 +1,5 @@
 # Usa la imagen base de PHP con Apache
-FROM php:8.4-apache as web
+FROM php:8.2-apache as web
 
 # Instala dependencias del sistema y Node.js/npm
 RUN apt-get update && apt-get install -y \

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68476556640b2495843d97cda583dbee",
+    "content-hash": "606d82c89ef544a2d2563eeba6006db6",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2023,16 +2023,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v12.1.0",
+            "version": "v12.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "09f4a014c3fea7726c6824f5e04fca6ee165e328"
+                "reference": "9be5738f1ca1530055bb9d6db81f909a7ed34842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/09f4a014c3fea7726c6824f5e04fca6ee165e328",
-                "reference": "09f4a014c3fea7726c6824f5e04fca6ee165e328",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9be5738f1ca1530055bb9d6db81f909a7ed34842",
+                "reference": "9be5738f1ca1530055bb9d6db81f909a7ed34842",
                 "shasum": ""
             },
             "require": {
@@ -2234,7 +2234,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-03-04T16:10:42+00:00"
+            "time": "2025-03-05T15:31:19+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -3711,16 +3711,16 @@
         },
         {
             "name": "openspout/openspout",
-            "version": "v4.29.0",
+            "version": "v4.28.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openspout/openspout.git",
-                "reference": "3032427a0cd95bdbd8081165f2daf134554cdcc1"
+                "reference": "ab05a09fe6fce57c90338f83280648a9786ce36b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openspout/openspout/zipball/3032427a0cd95bdbd8081165f2daf134554cdcc1",
-                "reference": "3032427a0cd95bdbd8081165f2daf134554cdcc1",
+                "url": "https://api.github.com/repos/openspout/openspout/zipball/ab05a09fe6fce57c90338f83280648a9786ce36b",
+                "reference": "ab05a09fe6fce57c90338f83280648a9786ce36b",
                 "shasum": ""
             },
             "require": {
@@ -3730,17 +3730,17 @@
                 "ext-libxml": "*",
                 "ext-xmlreader": "*",
                 "ext-zip": "*",
-                "php": "~8.3.0 || ~8.4.0"
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0"
             },
             "require-dev": {
                 "ext-zlib": "*",
-                "friendsofphp/php-cs-fixer": "^3.70.2",
-                "infection/infection": "^0.29.14",
+                "friendsofphp/php-cs-fixer": "^3.68.3",
+                "infection/infection": "^0.29.10",
                 "phpbench/phpbench": "^1.4.0",
-                "phpstan/phpstan": "^2.1.7",
+                "phpstan/phpstan": "^2.1.2",
                 "phpstan/phpstan-phpunit": "^2.0.4",
-                "phpstan/phpstan-strict-rules": "^2.0.3",
-                "phpunit/phpunit": "^12.0.6"
+                "phpstan/phpstan-strict-rules": "^2",
+                "phpunit/phpunit": "^11.5.4"
             },
             "suggest": {
                 "ext-iconv": "To handle non UTF-8 CSV files (if \"php-mbstring\" is not already installed or is too limited)",
@@ -3788,7 +3788,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openspout/openspout/issues",
-                "source": "https://github.com/openspout/openspout/tree/v4.29.0"
+                "source": "https://github.com/openspout/openspout/tree/v4.28.5"
             },
             "funding": [
                 {
@@ -3800,7 +3800,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-06T09:59:55+00:00"
+            "time": "2025-01-30T13:51:11+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -7183,53 +7183,6 @@
             "time": "2025-01-17T11:39:41+00:00"
         },
         {
-            "name": "thiagoprz/eloquent-composite-key",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thiagoprz/eloquent-composite-key.git",
-                "reference": "43012fa195db8517a5344355aa83cd39aaa466aa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thiagoprz/eloquent-composite-key/zipball/43012fa195db8517a5344355aa83cd39aaa466aa",
-                "reference": "43012fa195db8517a5344355aa83cd39aaa466aa",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1 || ^8.0 || ^8.1"
-            },
-            "require-dev": {
-                "orchestra/testbench": "6",
-                "squizlabs/php_codesniffer": "4.0.x-dev"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Thiagoprz\\CompositeKey\\": "src"
-                },
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Thiago Przyczynski",
-                    "email": "przyczynski@gmail.com"
-                }
-            ],
-            "description": "Eloquent Composite Key Support Package",
-            "support": {
-                "issues": "https://github.com/thiagoprz/eloquent-composite-key/issues",
-                "source": "https://github.com/thiagoprz/eloquent-composite-key/tree/1.0.1"
-            },
-            "time": "2022-04-20T19:12:31+00:00"
-        },
-        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "v2.3.0",
             "source": {
@@ -9743,16 +9696,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "6.3.0",
+            "version": "6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "d4e47a769525c4dd38cea90e5dcd435ddbbc7115"
+                "reference": "24b8fbc2c8e201bb1308e7b05148d6ab393b6959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/d4e47a769525c4dd38cea90e5dcd435ddbbc7115",
-                "reference": "d4e47a769525c4dd38cea90e5dcd435ddbbc7115",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/24b8fbc2c8e201bb1308e7b05148d6ab393b6959",
+                "reference": "24b8fbc2c8e201bb1308e7b05148d6ab393b6959",
                 "shasum": ""
             },
             "require": {
@@ -9771,7 +9724,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "6.2-dev"
+                    "dev-main": "6.3-dev"
                 }
             },
             "autoload": {
@@ -9811,7 +9764,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/6.3.0"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/6.3.1"
             },
             "funding": [
                 {
@@ -9819,7 +9772,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-06T10:28:19+00:00"
+            "time": "2025-03-07T06:57:01+00:00"
         },
         {
             "name": "sebastian/complexity",
