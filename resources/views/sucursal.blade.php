@@ -40,7 +40,7 @@
             <!-- Grid de Botones -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Botón: Abrir Caja -->
-                <form action="{{ url('/sucursal/abrir-caja') }}" method="POST" class="block">
+                <form action="{{ route('abrir-caja') }}" method="POST" class="block" id="abrirCajaForm">
                     @csrf
                     <button type="submit"
                         class="w-full p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow hover:shadow-lg transition transform hover:scale-105">
@@ -91,39 +91,6 @@
                     </button>
                 </form>
             </div>
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var cambiarChequesForm = document.getElementById('cambiarChequesForm');
-                    if (cambiarChequesForm) {
-                        cambiarChequesForm.addEventListener('submit', function(e) {
-                            var importe = document.getElementById('importe').value;
-                            document.getElementById('importe-hidden').value = importe;
-                        });
-                    }
-
-                    var agregarDineroForm = document.querySelector('form[action="{{ route('agregar-dinero') }}"]');
-                    if (agregarDineroForm) {
-                        agregarDineroForm.addEventListener('submit', function(e) {
-                            var importe = document.getElementById('importe').value;
-                            document.getElementById('importe-hidden-agregar').value = importe;
-                        });
-                    }
-
-                    var guardarEnCajaForm = document.getElementById('guardarenCaja');
-                    if (guardarEnCajaForm) {
-                        guardarEnCajaForm.addEventListener('submit', function(e) {
-                            var denominaciones = {};
-                            document.querySelectorAll('.denominacion-input').forEach(function(input) {
-                                var denominacion = input.getAttribute('data-denominacion');
-                                var cantidad = input.value;
-                                denominaciones[denominacion] = cantidad;
-                            });
-                            document.getElementById('denomDetalle-oculto').value = JSON.stringify(denominaciones);
-                        });
-                    }
-                });
-            </script>
-
 
             <!-- Sección de Detalle de Efectivo -->
             <div
@@ -185,10 +152,8 @@
                         </button>
                     </form>
                 </div>
-
-               
-
-
         </div>
     </div>
 </x-app-layout>
+
+

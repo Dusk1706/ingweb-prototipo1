@@ -95,7 +95,6 @@ class Modelo extends Model
 
             if ($importeRestante != 0) {
                 $this->baseDatos->cancelarTransaccion();
-                Log::error('No hay suficiente dinero en la caja');
                 return false;
             }
 
@@ -105,10 +104,8 @@ class Modelo extends Model
 
             $this->baseDatos->finalizarTransaccion();
 
-            Log::info('Se retiró el dinero de la caja: ' . json_encode($denomUsadas));
             return $denomUsadas;
         } catch (\Exception $e) {
-            Log::error('Error al retirar el dinero de la caja en modelo' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }
@@ -121,7 +118,6 @@ class Modelo extends Model
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
             if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
-                Log::error('La caja no está abierta en billetes');
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
@@ -130,18 +126,16 @@ class Modelo extends Model
 
             foreach ($denominaciones as $denom) {
                 $denom->existencia += rand(0, 50);
-                $this->baseDatos->guardar($denom);
+                $this->baseDatos->guardarObjeto($denom);
             }
 
-            Log::info('Se agregó la denominación a la caja: ' . json_encode($denom));
             return true;
         } catch (\Exception $e) {
-            Log::error('Error al agregar la denominación a la caja en modelo' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }
     }
-   
+
 
     public function generarBilletes($sucursalId)
     {
@@ -149,29 +143,26 @@ class Modelo extends Model
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
             if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
-                Log::error('La caja no está abierta en billetes');
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
             $denominaciones = [];
             $denominaciones['denominaciones'] = [];
-            foreach ([1000,500,200,100,50,20,10,5,2,1] as $denom) {
-               array_push($denominaciones['denominaciones'], [
-                'denominacion' => $denom,
-                'entregados' => rand(0,50)
-            ]);
+            foreach ([1000, 500, 200, 100, 50, 20, 10, 5, 2, 1] as $denom) {
+                array_push($denominaciones['denominaciones'], [
+                    'denominacion' => $denom,
+                    'entregados' => rand(0, 50)
+                ]);
             }
 
             return $denominaciones;
         } catch (\Exception $e) {
-            Log::error('Error al agregar la denominación a la caja en modelo' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }
     }
 
-    //guardar en caja
-    public function guardarEnCaja($sucursalId,$denomUsadas)
+    public function guardarEnCaja($sucursalId, $denomUsadas)
     {
         try {
             $this->baseDatos->iniciarTransaccion();
@@ -179,23 +170,20 @@ class Modelo extends Model
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
             if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
-                Log::error('La caja no está abierta en guardar en caja');
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
 
             $denominaciones = $this->baseDatos->getDenominaciones($sucursalId);
-            
 
             foreach ($denominaciones as $denom) {
                 $denom->existencia += $denomUsadas[$denom->denominacion];
-                $this->baseDatos->guardar($denom);
+                $this->baseDatos->guardarObjeto($denom);
             }
-            
+
             $this->baseDatos->finalizarTransaccion();
             return true;
         } catch (\Exception $e) {
-            Log::error('Error al guardar en caja el dinero' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }

@@ -15,12 +15,10 @@ class SucursalController extends Controller
         $this->modelo = new Modelo();
     }
 
-
     public function index()
     {
         return view('sucursal');
     }
-
 
     public function abrirCaja(Request $request)
     {
@@ -28,11 +26,9 @@ class SucursalController extends Controller
 
         $mensaje = $this->modelo->abrirCaja($sucursalId);
         if (!$mensaje) {
-            Log::error('No se pudo abrir la caja');
             return back()->with('error', 'No se pudo abrir la caja');
         }
 
-        Log::info('La caja fue abierta exitosamente');
         return back()->with('success', 'La caja fue abierta exitosamente');
     }
 
@@ -68,12 +64,12 @@ class SucursalController extends Controller
 
     public function agregarBilletes(Request $request)
     {
-        
         $sucursalId = $sucursalId = auth()->user()->id_sucursal;
         $denomUsadas = $this->modelo->generarBilletes($sucursalId);
         if (!$denomUsadas) {
             return back()->with('error', 'No se pudo generar billetes');
         }
+        
         $denomDetalle = collect($denomUsadas['denominaciones'])
         ->pluck('entregados', 'denominacion')
         ->toArray();
@@ -95,8 +91,7 @@ class SucursalController extends Controller
         if (!$mensaje) {
             return back()->with('error', 'No se pudo guardar el dinero en la caja');
         }
-        return back()->with('success', 'El dinero fue guardado exitosamente');
-
         
+        return back()->with('success', 'El dinero fue guardado exitosamente');
     }
 }
