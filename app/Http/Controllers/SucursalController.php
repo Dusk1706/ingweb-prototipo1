@@ -88,8 +88,9 @@ class SucursalController extends Controller
     public function guardarEnCaja(Request $request)
     {
         $sucursalId = auth()->user()->id_sucursal;
-        $denomUsadas= $request->input('denomUsadas');
-        Log::info('Se guardó el dinero en la caja: ' . json_encode($denomUsadas));
+        $denomDetalle = $request->input('denomDetalle');
+        $denomDetalle = json_decode($denomDetalle, true);
+
         
     }
 }
