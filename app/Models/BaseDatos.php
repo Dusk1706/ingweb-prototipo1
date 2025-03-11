@@ -37,4 +37,15 @@ class BaseDatos extends Model
             ->get();
     }
 
+    public function guardar($sucursal)
+    {
+        return $sucursal->save();
+    }
+
+    public function actualizarExistencia($sucursalId, $denominacion, $cantidad)
+    {
+        return Sucursal::where('id_sucursal', $sucursalId)
+            ->where('denominacion', $denominacion)
+            ->increment('existencia', $cantidad);
+    }
 }

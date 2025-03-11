@@ -91,6 +91,12 @@ class SucursalController extends Controller
         $denomDetalle = $request->input('denomDetalle');
         $denomDetalle = json_decode($denomDetalle, true);
 
+        $mensaje = $this->modelo->guardarEnCaja($sucursalId, $denomDetalle);
+        if (!$mensaje) {
+            return back()->with('error', 'No se pudo guardar el dinero en la caja');
+        }
+        return back()->with('success', 'El dinero fue guardado exitosamente');
+
         
     }
 }

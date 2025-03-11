@@ -171,8 +171,9 @@ class Modelo extends Model
     }
 
     //guardar en caja
-    public function guardarEnCaja($sucursalId, $importe)
+    public function guardarEnCaja($sucursalId,$denomUsadas)
     {
+        try {
             $this->baseDatos->iniciarTransaccion();
 
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
@@ -182,5 +183,21 @@ class Modelo extends Model
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
+
+            $denominaciones = $this->baseDatos->getDenominaciones($sucursalId);
+            
+
+            foreach ($denominaciones as $denom) {
+                $denom->existencia += $denomUsadas[$denom->denominacion];
+                $this->baseDatos->guardar($denom);
+            }
+            
+            $this->baseDatos->finalizarTransaccion();
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error al guardar en caja el dinero' . $e->getMessage());
+            $this->baseDatos->cancelarTransaccion();
+            return false;
+        }
     }
 }

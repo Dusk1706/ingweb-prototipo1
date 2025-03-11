@@ -186,21 +186,7 @@
                     </form>
                 </div>
 
-                <!-- Total -->
-                <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div class="mb-2 md:mb-0">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Total calculado automáticamente</p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total:</span>
-                            <span class="text-3xl font-bold text-blue-600 dark:text-blue-300">
-                                $<span id="total-calculado">0.00</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+               
 
 
         </div>
