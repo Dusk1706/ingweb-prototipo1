@@ -169,5 +169,18 @@ class Modelo extends Model
             return false;
         }
     }
-   
+
+    //guardar en caja
+    public function guardarEnCaja($sucursalId, $importe)
+    {
+            $this->baseDatos->iniciarTransaccion();
+
+            $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
+
+            if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
+                Log::error('La caja no está abierta en guardar en caja');
+                $this->baseDatos->cancelarTransaccion();
+                return false;
+            }
+    }
 }

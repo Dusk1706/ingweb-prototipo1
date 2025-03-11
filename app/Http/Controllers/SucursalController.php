@@ -82,4 +82,14 @@ class SucursalController extends Controller
             'denomDetalle' => $denomDetalle
         ])->with('success', 'El dinero fue generado exitosamente');
     }
+
+    
+
+    public function guardarEnCaja(Request $request)
+    {
+        $sucursalId = auth()->user()->id_sucursal;
+        $denomUsadas= $request->input('denomUsadas');
+        Log::info('Se guardó el dinero en la caja: ' . json_encode($denomUsadas));
+        
+    }
 }

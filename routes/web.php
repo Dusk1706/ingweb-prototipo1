@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified'])->prefix('sucursal')->group(function () {
     Route::post('/abrir-caja', [SucursalController::class, 'abrirCaja'])->name('abrir-caja');
     Route::post('/cambiar-cheques', [SucursalController::class, 'cambiarCheques'])->name('cambiar-cheques');
     Route::post('/agregar-dinero', [SucursalController::class, 'agregarBilletes'])->name('agregar-dinero');
+    Route::post('/guardar-en-caja', [SucursalController::class, 'guardarEnCaja'])->name('guardar-en-caja');
 });
 
 Route::get('/dashboard', function () {

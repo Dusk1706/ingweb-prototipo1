@@ -122,6 +122,7 @@
                                     <span
                                         class="text-base font-medium text-gray-700 dark:text-gray-300">${{ $coin }}</span>
                                     <input type="number" data-denominacion="{{ $coin }}"
+                                        name="denomDetalle[{{ $coin }}]"
                                         class="denominacion-input w-20 px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="0" min="0" value="{{ $denomDetalle[$coin] ?? 0 }}">
                                 </div>
@@ -137,22 +138,35 @@
                         </h4>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach ([20, 50, 100, 200, 500, 1000] as $bill)
-                                <div
-                                    class="group relative bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                                    <div class="flex flex-col gap-2">
-                                        <span class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                                            ${{ number_format($bill) }}
-                                        </span>
-                                        <input type="number" data-denominacion="{{ $bill }}"
-                                            class="denominacion-input w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="0" min="0" value="{{ $denomDetalle[$bill] ?? 0 }}">
-                                    </div>
+                            <div class="group relative bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <div class="flex flex-col gap-2">
+                                    <span class="text-xl font-bold text-gray-800 dark:text-gray-200">
+                                        ${{ number_format($bill) }}
+                                    </span>
+                                    <input type="number" 
+                                           name="denomDetalle[{{ $bill }}]"  
+                                           data-denominacion="{{ $bill }}"
+                                           class="denominacion-input w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-right text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="0" min="0" 
+                                           value="{{ $denomDetalle[$bill] ?? 0 }}">
                                 </div>
-                            @endforeach
+                            </div>
+                        @endforeach                        
                         </div>
                     </div>
                 </div>
-
+                
+                <!--crear boton para enviar los billetes a la BD-->
+                <div class="mt-8">
+                    <form action="{{ route('guardar-en-caja') }}" method="POST" id="guardarenCaja" class="block">
+                        @csrf
+                        <button type="submit"
+                            class="w-full p-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow transition transform hover:scale-105">
+                            Guardar en Caja
+                        </button>
+                    </form>
+                </div>
+            
                 <!-- Total -->
                 <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
