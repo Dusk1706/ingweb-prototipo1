@@ -17,7 +17,13 @@ class SucursalController extends Controller
 
     public function index()
     {
-        return view('sucursal');
+        $denomDetalle = session('denomDetalle', []);
+        $importe = session('importe', 0);
+
+        return view('sucursal', [
+            'denomDetalle' => $denomDetalle,
+            'importe' => $importe
+        ]);
     }
 
     public function abrirCaja(Request $request)
@@ -26,10 +32,13 @@ class SucursalController extends Controller
 
         $mensaje = $this->modelo->abrirCaja($sucursalId);
         if (!$mensaje) {
-            return back()->with('error', 'No se pudo abrir la caja');
+            return redirect()->route('sucursal')
+                ->with('error', 'No se pudo abrir la caja');
         }
 
-        return back()->with('success', 'La caja fue abierta exitosamente');
+
+        return redirect()->route('sucursal')
+            ->with('success', 'La caja fue abierta exitosamente');
     }
 
     public function cambiarCheques(Request $request)
@@ -48,16 +57,19 @@ class SucursalController extends Controller
         $denomUsadas = $this->modelo->cambiarCheques($sucursalId, $importe);
 
         if (!$denomUsadas) {
-            return back()->with('error', 'No se pudo retirar el dinero de la caja');
+            return redirect()->route('sucursal')
+                ->with('error', 'No se pudo cambiar los cheques');
         }
         $denomDetalle = collect($denomUsadas['denominaciones'])
             ->pluck('entregados', 'denominacion')
             ->toArray();
 
-        return view('sucursal', [
-            'denomDetalle' => $denomDetalle,
-            'importe'      => $denomUsadas['importe']
-        ])->with('success', 'El dinero fue retirado exitosamente');
+        return redirect()->route('sucursal')
+            ->with([
+                'denomDetalle' => $denomDetalle,
+                'importe' => $denomUsadas['importe'],
+                'success' => 'El dinero fue cambiado exitosamente'
+            ]);
     }
 
 
@@ -67,19 +79,23 @@ class SucursalController extends Controller
         $sucursalId = $sucursalId = auth()->user()->id_sucursal;
         $denomUsadas = $this->modelo->generarBilletes($sucursalId);
         if (!$denomUsadas) {
-            return back()->with('error', 'No se pudo generar billetes');
+            return redirect()->route('sucursal')
+                ->with('error', 'No se pudo generar billetes');
         }
-        
-        $denomDetalle = collect($denomUsadas['denominaciones'])
-        ->pluck('entregados', 'denominacion')
-        ->toArray();
 
-        return view('sucursal', [
-            'denomDetalle' => $denomDetalle
-        ])->with('success', 'El dinero fue generado exitosamente');
+        $denomDetalle = collect($denomUsadas['denominaciones'])
+            ->pluck('entregados', 'denominacion')
+            ->toArray();
+
+
+        return redirect()->route('sucursal')
+            ->with([
+                'denomDetalle' => $denomDetalle,
+                'success' => 'El dinero fue generado exitosamente'
+            ]);
     }
 
-    
+
 
     public function guardarEnCaja(Request $request)
     {
@@ -89,9 +105,11 @@ class SucursalController extends Controller
 
         $mensaje = $this->modelo->guardarEnCaja($sucursalId, $denomDetalle);
         if (!$mensaje) {
-            return back()->with('error', 'No se pudo guardar el dinero en la caja');
+            return redirect()->route('sucursal')
+                ->with('error', 'No se pudo guardar el dinero en la caja');
         }
-        
-        return back()->with('success', 'El dinero fue guardado exitosamente');
+
+        return redirect()->route('sucursal')
+            ->with('success', 'El dinero fue guardado exitosamente');
     }
 }
