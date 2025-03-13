@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var cambiarChequesForm = document.getElementById('cambiarChequesForm');
+    var cambiarChequesForm = document.getElementById('formCambiarCheques');
     if (cambiarChequesForm) {
         cambiarChequesForm.addEventListener('submit', function(e) {
             var importe = document.getElementById('importe').value;

@@ -19,6 +19,7 @@ class SucursalController extends Controller
     {
         $denomDetalle = session('denomDetalle', []);
         $importe = session('importe', 0);
+        log::info($denomDetalle);
 
         return view('sucursal', [
             'denomDetalle' => $denomDetalle,
@@ -78,19 +79,17 @@ class SucursalController extends Controller
     {
         $sucursalId = $sucursalId = auth()->user()->id_sucursal;
         $denomUsadas = $this->modelo->generarBilletes($sucursalId);
+
+        Log::info($denomUsadas);
+
         if (!$denomUsadas) {
             return redirect()->route('sucursal')
                 ->with('error', 'No se pudo generar billetes');
         }
 
-        $denomDetalle = collect($denomUsadas['denominaciones'])
-            ->pluck('entregados', 'denominacion')
-            ->toArray();
-
-
         return redirect()->route('sucursal')
             ->with([
-                'denomDetalle' => $denomDetalle,
+                'denomDetalle' => $denomUsadas,
                 'success' => 'El dinero fue generado exitosamente'
             ]);
     }
@@ -101,7 +100,6 @@ class SucursalController extends Controller
     {
         $sucursalId = auth()->user()->id_sucursal;
         $denomDetalle = $request->input('denomDetalle');
-        $denomDetalle = json_decode($denomDetalle, true);
 
         $mensaje = $this->modelo->guardarEnCaja($sucursalId, $denomDetalle);
         if (!$mensaje) {

@@ -15,6 +15,7 @@
                     title="Abrir Caja"
                     description="Iniciar operaciones del día"
                     color="blue"
+                    id="formAbrirCaja"
                 />
 
                 <x-action-button
@@ -23,6 +24,7 @@
                     title="Cambiar Cheques"
                     description="Gestión de intercambio"
                     color="green"
+                    id="formCambiarCheques"
                 >
                     <input type="hidden" name="importe" id="importe-hidden">
                 </x-action-button>
@@ -33,6 +35,7 @@
                     title="Agregar Dinero"
                     description="Fondos adicionales"
                     color="purple"
+                    id="formAgregarDinero"
                 >
                     <input type="hidden" name="importe" id="importe-hidden-agregar">
                 </x-action-button>

@@ -1,4 +1,4 @@
-<form action="{{ $route }}" method="POST" class="block">
+<form action="{{ $route }}" method="POST" class="block" id="{{ $id }}">
     @csrf
     {{ $slot }}
     <button type="submit"

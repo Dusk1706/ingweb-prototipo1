@@ -33,7 +33,9 @@ class Modelo extends Model
 
                 foreach ([1, 2, 5, 10, 20, 50, 100, 200, 500, 1000] as $denominacion) {
                     $this->baseDatos->insertarDenominacion(
-                        $sucursalId, $denominacion, rand(0, 50)
+                        $sucursalId,
+                        $denominacion,
+                        rand(0, 50)
                     );
                 }
             }
@@ -74,7 +76,7 @@ class Modelo extends Model
                 $denom->existencia -= $cantidadARetirar;
                 $denom->entregados += $cantidadARetirar;
                 $this->baseDatos->guardarObjeto($denom);
-                
+
                 $importeRestante -= $cantidadARetirar * $valor;
 
                 if ($cantidadARetirar > 0) {
@@ -133,13 +135,10 @@ class Modelo extends Model
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
+
             $denominaciones = [];
-            $denominaciones['denominaciones'] = [];
             foreach ([1000, 500, 200, 100, 50, 20, 10, 5, 2, 1] as $denom) {
-                array_push($denominaciones['denominaciones'], [
-                    'denominacion' => $denom,
-                    'entregados' => rand(0, 50)
-                ]);
+                $denominaciones[$denom] = rand(0, 50);
             }
 
             return $denominaciones;
