@@ -29,27 +29,18 @@ class Modelo extends Model
             }
 
             if (is_null($caja)) {
-                $caja = new SucursalEstatus();
-                $caja->id_sucursal = $sucursalId;
+                $this->baseDatos->insertarEstadoCaja($sucursalId, true);
 
                 foreach ([1, 2, 5, 10, 20, 50, 100, 200, 500, 1000] as $denominacion) {
-                    $sucursal = new Sucursal();
-                    $sucursal->id_sucursal = $sucursalId;
-                    $sucursal->denominacion = $denominacion;
-                    $sucursal->existencia = rand(0, 50);
-                    $sucursal->entregados = 0;
-                    $sucursal->save();
+                    $this->baseDatos->insertarDenominacion(
+                        $sucursalId, $denominacion, rand(0, 50)
+                    );
                 }
-
             }
-
-            $caja->caja_abierta = true;
-            $caja->save();
 
             $this->baseDatos->finalizarTransaccion();
             return true;
         } catch (\Exception $e) {
-            Log::error('Error al abrir la caja en modelo' . $e->getMessage());
             $this->baseDatos->cancelarTransaccion();
             return false;
         }
@@ -63,7 +54,6 @@ class Modelo extends Model
             $cajaAbierta = $this->baseDatos->getEstadoCaja($sucursalId);
 
             if (is_null($cajaAbierta) || !$cajaAbierta->caja_abierta) {
-                Log::error('La caja no está abierta en cheques');
                 $this->baseDatos->cancelarTransaccion();
                 return false;
             }
@@ -83,6 +73,8 @@ class Modelo extends Model
 
                 $denom->existencia -= $cantidadARetirar;
                 $denom->entregados += $cantidadARetirar;
+                $this->baseDatos->guardarObjeto($denom);
+                
                 $importeRestante -= $cantidadARetirar * $valor;
 
                 if ($cantidadARetirar > 0) {
@@ -98,12 +90,7 @@ class Modelo extends Model
                 return false;
             }
 
-            foreach ($denominaciones as $denom) {
-                $denom->save();
-            }
-
             $this->baseDatos->finalizarTransaccion();
-
             return $denomUsadas;
         } catch (\Exception $e) {
             $this->baseDatos->cancelarTransaccion();

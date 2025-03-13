@@ -22,6 +22,24 @@ class BaseDatos extends Model
         return DB::rollBack();
     }
 
+    public function insertarEstadoCaja($sucursalId, $cajaAbierta)
+    {
+        $caja = new SucursalEstatus();
+        $caja->id_sucursal = $sucursalId;
+        $caja->caja_abierta = $cajaAbierta;
+        return $caja->save();
+    }
+
+    public function insertarDenominacion($sucursalId, $denominacion, $existencia)
+    {
+        $sucursal = new Sucursal();
+        $sucursal->id_sucursal = $sucursalId;
+        $sucursal->denominacion = $denominacion;
+        $sucursal->existencia = $existencia;
+        $sucursal->entregados = 0;
+        return $sucursal->save();
+    }
+
     public function getEstadoCaja($sucursalId)
     {
         return SucursalEstatus::where('id_sucursal', $sucursalId)
