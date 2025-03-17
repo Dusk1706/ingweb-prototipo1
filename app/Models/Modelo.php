@@ -2,18 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseDatos;
-use Nette\Utils\Random;
-use Illuminate\Support\Facades\Log;
 
-class Modelo extends Model
+class Modelo
 {
-    protected $baseDatos;
+    private static $instancia;
+    private $baseDatos;
 
-    public function __construct()
+    private function __construct()
     {
         $this->baseDatos = new BaseDatos();
+    }
+
+    public static function getInstancia()
+    {
+        if (is_null(self::$instancia)) {
+            self::$instancia = new Modelo();
+        }
+
+        return self::$instancia;
     }
 
     public function abrirCaja($sucursalId)

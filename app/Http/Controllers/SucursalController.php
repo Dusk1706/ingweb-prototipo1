@@ -12,14 +12,13 @@ class SucursalController extends Controller
 
     public function __construct()
     {
-        $this->modelo = new Modelo();
+        $this->modelo = Modelo::getInstancia();
     }
 
     public function index()
     {
         $denomDetalle = session('denomDetalle', []);
         $importe = session('importe', 0);
-        log::info($denomDetalle);
 
         return view('sucursal', [
             'denomDetalle' => $denomDetalle,

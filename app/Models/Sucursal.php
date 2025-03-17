@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sucursal extends Model
 {
     protected $table = 'sucursales';
-
     protected $primaryKey = 'id_caja';
-
     public $incrementing = true;
     public $timestamps = false;
     
